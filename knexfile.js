@@ -2,7 +2,6 @@ import 'dotenv/config';
 // Update with your config settings.
 
 const configuration = {
-  development: {
     client: 'mysql2',
     connection: {
       host: process.env.DB_HOST,
@@ -17,7 +16,6 @@ const configuration = {
     seeds: {
       directory: './seeds',
     },
-  },
 };
 
 export default configuration;

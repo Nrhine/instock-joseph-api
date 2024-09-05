@@ -1,10 +1,6 @@
 import 'dotenv/config';
 // Update with your config settings.
 
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
-
 const configuration = {
   development: {
     client: 'mysql2',
@@ -13,6 +9,7 @@ const configuration = {
       database: process.env.DB_NAME,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
+      charset: 'utf8',
     },
     migrations: {
       directory: './migrations',

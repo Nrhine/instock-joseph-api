@@ -3,7 +3,7 @@ import initKnex from 'knex';
 import configuration from '../knexfile.js';
 
 const router = express.Router();
-const knex = initKnex(configuration.development);
+const knex = initKnex(configuration);
 
 // for list of warehouses
 router.get('/', async (_req, res) => {

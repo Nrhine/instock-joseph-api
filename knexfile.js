@@ -1,13 +1,13 @@
-import "dotenv/config";
+import 'dotenv/config';
 // Update with your config settings.
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
-export default {
+const configuration = {
   development: {
-    client: "mysql2",
+    client: 'mysql2',
     connection: {
       host: process.env.DB_HOST,
       database: process.env.DB_NAME,
@@ -15,10 +15,12 @@ export default {
       password: process.env.DB_PASSWORD,
     },
     migrations: {
-      directory: "./migrations",
+      directory: './migrations',
     },
     seeds: {
-      directory: "./seeds",
+      directory: './seeds',
     },
   },
 };
+
+export default configuration;

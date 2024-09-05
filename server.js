@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 app.use('/inventory', itemRoutes);
 
 // all warehouse routes
-app.use('/inventory', warehouseRoutes);
+app.use('/warehouses', warehouseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);

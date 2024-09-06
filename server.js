@@ -25,6 +25,9 @@ app.use('/warehouses', warehouseRoutes);
 // post warehouse
 app.use('/api', warehouseRoutes)
 
+// get inventories for a given warehouse /warehouses/:id/inventories
+app.use('/api/warehouses', warehouseRoutes);
+
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);
 });

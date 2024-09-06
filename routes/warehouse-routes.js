@@ -1,8 +1,8 @@
-import express from 'express';
-import initKnex from 'knex';
-import configuration from '../knexfile.js';
-import { addWarehouse } from '../controllers/warehouseController.js'
+import express from "express";
+import initKnex from "knex";
 import { body, validationResult } from "express-validator";
+import configuration from "../knexfile.js";
+import { addWarehouse } from "../controllers/warehouseController.js";
 
 const router = express.Router();
 const knex = initKnex(configuration);
@@ -98,5 +98,28 @@ router.put(
     }
   }
 );
+
+// this request only deletes the warehouse, I'll add the delete inventory to the code after talking to team
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const warehouseExists = await knex("warehouses").where({ id }).first();
+    if (!warehouseExists) {
+      return res.status(404).json({ error: "Warehouse not found" });
+    }
+
+    await knex("warehouses").where({ id }).del();
+
+    return res.status(204).send();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Error deleting warehouse: ${error.message}` });
+  }
+});
+
+// for adding a new warehouse
+router.post("/warehouses", addWarehouse);
 
 export default router;

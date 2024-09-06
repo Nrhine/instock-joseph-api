@@ -1,7 +1,8 @@
-import express from "express";
-import initKnex from "knex";
+import express from 'express';
+import initKnex from 'knex';
+import configuration from '../knexfile.js';
+import { addWarehouse } from '../controllers/warehouseController.js'
 import { body, validationResult } from "express-validator";
-import configuration from "../knexfile.js";
 
 const router = express.Router();
 const knex = initKnex(configuration);
@@ -27,6 +28,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// for adding a new warehouse
+router.post('/warehouses', addWarehouse);
 router.put(
   "/:id",
   [

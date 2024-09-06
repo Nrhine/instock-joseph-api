@@ -20,13 +20,13 @@ app.get('/', (req, res) => {
 app.use('/inventory', itemRoutes);
 
 // all warehouse routes
-app.use('/warehouses', warehouseRoutes);
+app.use('/warehouse', warehouseRoutes);
 
 // post warehouse
 app.use('/api', warehouseRoutes)
 
 // get inventories for a given warehouse /warehouses/:id/inventories
-app.use('/api/warehouses', warehouseRoutes);
+app.use('/api/warehouse', warehouseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);

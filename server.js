@@ -1,8 +1,8 @@
-import express from 'express';
-import cors from 'cors';
-import 'dotenv/config';
-import itemRoutes from './routes/stock-routes.js';
-import warehouseRoutes from './routes/warehouse-routes.js';
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import itemRoutes from "./routes/stock-routes.js";
+import warehouseRoutes from "./routes/warehouse-routes.js";
 
 const PORT = process.env.PORT || 8081;
 const app = express();
@@ -12,18 +12,18 @@ app.use(cors());
 app.use(express.json());
 
 // main route
-app.get('/', (req, res) => {
-  res.send('Welcome to the InStock API');
+app.get("/", (req, res) => {
+  res.send("Welcome to the InStock API");
 });
 
 // all inventory routes
-app.use('/inventory', itemRoutes);
+app.use("/inventory", itemRoutes);
 
 // all warehouse routes
-app.use('/warehouses', warehouseRoutes);
+app.use("/warehouses", warehouseRoutes);
 
 // post warehouse
-app.use('/api', warehouseRoutes)
+app.use("/api", warehouseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);

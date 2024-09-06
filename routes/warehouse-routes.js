@@ -2,6 +2,7 @@ import express from "express";
 import initKnex from "knex";
 import { body, validationResult } from "express-validator";
 import configuration from "../knexfile.js";
+import { addWarehouse } from "../controllers/warehouseController.js";
 
 const router = express.Router();
 const knex = initKnex(configuration);
@@ -95,5 +96,7 @@ router.put(
     }
   }
 );
+// for adding a new warehouse
+router.post("/warehouses", addWarehouse);
 
 export default router;

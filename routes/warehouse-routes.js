@@ -122,4 +122,27 @@ router.delete("/:id", async (req, res) => {
 // for adding a new warehouse
 router.post("/warehouses", addWarehouse);
 
+
+// 
+router.get("/:id/inventories", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Check if warehouse exists
+    const warehouseExists = await knex("warehouses").where({ id }).first();
+
+    if (!warehouseExists) {
+      return res.status(404).json({ error: 'Warehouse not found' });
+    }
+
+    // Fetch inventories for the warehouse
+    const inventories = await knex("inventories")
+      .where({ warehouse_id: id })
+      .select('id', 'item_name', 'category', 'status', 'quantity');
+
+    res.status(200).json(inventories);
+  } catch (error) {
+    res.status(500).send(`Error retrieving inventories for warehouse: ${error}`);
+  }
+});
+
 export default router;

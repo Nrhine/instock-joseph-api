@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// for create a warehouse
+// for adding a new warehouse
 router.post('/warehouses', addWarehouse);
 
 export default router;

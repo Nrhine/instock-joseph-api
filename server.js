@@ -22,6 +22,9 @@ app.use('/inventory', itemRoutes);
 // all warehouse routes
 app.use('/warehouses', warehouseRoutes);
 
+// post warehouse
+app.use('/api', warehouseRoutes)
+
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);
 });

@@ -1,6 +1,7 @@
 import express from 'express';
 import initKnex from 'knex';
 import configuration from '../knexfile.js';
+import { addWarehouse } from '../controllers/warehouseController.js'
 
 const router = express.Router();
 const knex = initKnex(configuration);
@@ -25,5 +26,8 @@ router.get('/:id', async (req, res) => {
     res.status(500).send(`Error retrieving specific warehouse: ${error}`);
   }
 });
+
+// for create a warehouse
+router.post('/warehouses', addWarehouse);
 
 export default router;

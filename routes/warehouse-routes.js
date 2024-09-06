@@ -28,6 +28,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// for adding a new warehouse
+router.post('/warehouses', addWarehouse);
 router.put(
   "/:id",
   [

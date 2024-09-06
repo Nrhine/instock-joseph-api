@@ -22,12 +22,32 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex.select("*").from("warehouses").where({ id: id });
-    res.status(200).json(data);
+    if (!data.length) {
+      return res.status(404).json({ error: "Warehouse not found" });
+    }
+    res.status(200).json(data[0]);
   } catch (error) {
     res.status(500).send(`Error retrieving specific warehouse: ${error}`);
   }
 });
 
+router.get("/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const warehouse = await knex("warehouses").where({ id }).first();
+    if (!warehouse) {
+      return res.status(404).json({ error: "Warehouse not found" });
+    }
+    res.status(200).json(warehouse);
+  } catch (error) {
+    res.status(500).send(`Error retrieving warehouse for edit: ${error}`);
+  }
+});
+
+// for adding a new warehouse
+router.post('/warehouses', addWarehouse);
+
+//update exist warehouse
 router.put(
   "/:id",
   [
@@ -118,6 +138,29 @@ router.delete("/:id", async (req, res) => {
 });
 
 // for adding a new warehouse
-router.post("/warehouses", addWarehouse);
+//router.post("/warehouses", addWarehouse);
+
+
+// 
+router.get("/:id/inventories", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Check if warehouse exists
+    const warehouseExists = await knex("warehouses").where({ id }).first();
+
+    if (!warehouseExists) {
+      return res.status(404).json({ error: 'Warehouse not found' });
+    }
+
+    // Fetch inventories for the warehouse
+    const inventories = await knex("inventories")
+      .where({ warehouse_id: id })
+      .select('id', 'item_name', 'category', 'status', 'quantity');
+
+    res.status(200).json(inventories);
+  } catch (error) {
+    res.status(500).send(`Error retrieving inventories for warehouse: ${error}`);
+  }
+});
 
 export default router;

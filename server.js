@@ -6,7 +6,7 @@ import warehouseRoutes from './routes/warehouse-routes.js';
 
 const PORT = process.env.PORT || 8081;
 const app = express();
-const cors = require('cors');
+
 
 // middleware
 app.use(cors());

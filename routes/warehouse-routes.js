@@ -45,9 +45,12 @@ router.get("/:id/edit", async (req, res) => {
 });
 
 // for adding a new warehouse
-router.post('/warehouses', addWarehouse);
+//router.post('/', addWarehouse);
+router.post('/', (req, res) => {
+  console.log("Received POST request to add warehouse", req.body);
+  addWarehouse(req, res);
+});
 
-//update exist warehouse
 router.put(
   "/:id",
   [
@@ -107,8 +110,8 @@ router.put(
       });
 
       const updatedWarehouse = await knex("warehouses").where({ id }).first();
-
       return res.status(200).json(updatedWarehouse);
+
     } catch (error) {
       return res
         .status(500)

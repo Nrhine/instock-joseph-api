@@ -17,6 +17,8 @@ router.get("/", async (_req, res) => {
   }
 });
 
+
+
 // for specific warehouse information
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -126,10 +128,6 @@ router.delete("/:id", async (req, res) => {
       .json({ error: `Error deleting warehouse: ${error.message}` });
   }
 });
-
-// for adding a new warehouse
-//router.post("/warehouses", addWarehouse);
-
 
 // 
 router.get("/:id/inventories", async (req, res) => {

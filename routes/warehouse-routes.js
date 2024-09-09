@@ -17,8 +17,6 @@ router.get("/", async (_req, res) => {
   }
 });
 
-
-
 // for specific warehouse information
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -35,7 +33,7 @@ router.get("/:id", async (req, res) => {
 
 // for adding a new warehouse
 //router.post('/', addWarehouse);
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   console.log("Received POST request to add warehouse", req.body);
   addWarehouse(req, res);
 });
@@ -54,7 +52,7 @@ router.put(
     body("contact_phone")
       .notEmpty()
       .withMessage("Phone number is required")
-      .matches(/^\+1\s?\(\d{3}\)\s?\d{3}-\d{4}$/)   
+      .matches(/^\+1\s?\(\d{3}\)\s?\d{3}-\d{4}$/)
       .withMessage("Invalid phone number format"),
     body("contact_email")
       .notEmpty()
@@ -100,7 +98,6 @@ router.put(
 
       const updatedWarehouse = await knex("warehouses").where({ id }).first();
       return res.status(200).json(updatedWarehouse);
-
     } catch (error) {
       return res
         .status(500)
@@ -119,6 +116,8 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ error: "Warehouse not found" });
     }
 
+    await knex("inventories").where({ warehouse_id: id }).del();
+
     await knex("warehouses").where({ id }).del();
 
     return res.status(204).send();
@@ -129,7 +128,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// 
+//
 router.get("/:id/inventories", async (req, res) => {
   const { id } = req.params;
   try {
@@ -137,17 +136,19 @@ router.get("/:id/inventories", async (req, res) => {
     const warehouseExists = await knex("warehouses").where({ id }).first();
 
     if (!warehouseExists) {
-      return res.status(404).json({ error: 'Warehouse not found' });
+      return res.status(404).json({ error: "Warehouse not found" });
     }
 
     // Fetch inventories for the warehouse
     const inventories = await knex("inventories")
       .where({ warehouse_id: id })
-      .select('id', 'item_name', 'category', 'status', 'quantity');
+      .select("id", "item_name", "category", "status", "quantity");
 
     res.status(200).json(inventories);
   } catch (error) {
-    res.status(500).send(`Error retrieving inventories for warehouse: ${error}`);
+    res
+      .status(500)
+      .send(`Error retrieving inventories for warehouse: ${error}`);
   }
 });
 

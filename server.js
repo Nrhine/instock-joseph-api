@@ -20,10 +20,10 @@ app.get("/", (req, res) => {
 app.use("/api/inventories", itemRoutes);
 
 // all warehouse routes
-//app.use('/warehouses', warehouseRoutes);
+app.use("/warehouses", warehouseRoutes);
 
 // post warehouse
-//app.use('/api', warehouseRoutes)
+app.use("/api", warehouseRoutes);
 
 // get inventories for a given warehouse /warehouses/:id/inventories
 app.use("/api/warehouses", warehouseRoutes);

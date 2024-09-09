@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 // all inventory routes
-app.use('/inventory', itemRoutes);
+app.use('/api/inventories', itemRoutes);
 
 // all warehouse routes
 //app.use('/warehouses', warehouseRoutes);

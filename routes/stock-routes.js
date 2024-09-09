@@ -7,19 +7,7 @@ import { body, validationResult } from "express-validator";
 
 //for list of inventories
 router.get("/", async (_req, res) => {
-  try {
-    //   const inventories = await knex("inventories").select(
-    //     "id",
-    //     "item_name",
-    //     "category",
-    //     "status",
-    //     "quantity",
-    //     "description"
-    //   );
-    //   if (inventories.length === 0) {
-    //     return res.status(404).json({ message: "No inventories found" });
-    //   }
-    //   res.status(200).json(inventories);
+    try {
     const inventories = await knex("inventories")
       .join("warehouses", "warehouses.id", "inventories.warehouse_id")
       .select(
@@ -95,6 +83,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Delete Inventory
 router.delete("/:id", async (req, res) => {
   try {
     const itemDeleted = await knex("inventories")
@@ -175,5 +164,44 @@ router.put(
     }
   }
 );
+
+// Edit Inventory
+const getInventoryById = async (id) => {
+    return await knex('inventories').where({ id }).first();
+};
+
+const validateInventoryData = (data) => {
+    const { item_name, description, category, status, quantity } = data;
+    if (!item_name || !description || !category || !status || quantity === undefined) {
+        return 'Missing required fields';
+    }
+    return null;
+};
+
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const inventoryData = req.body;
+        const validationError = validateInventoryData(inventoryData);
+        if (validationError) {
+            return res.status(400).json({ error: validationError });
+        }
+        const existingInventory = await getInventoryById(id);
+        if (!existingInventory) {
+            return res.status(404).json({ error: 'Inventory item not found' });
+        }
+        await knex('inventories')
+            .where({ id })
+            .update({
+                ...inventoryData,
+                updated_at: knex.fn.now()
+            });
+        const updatedInventory = await getInventoryById(id);
+        res.json(updatedInventory);
+    } catch (error) {
+        console.error('Error updating inventory:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 export default router;

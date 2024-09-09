@@ -6,38 +6,41 @@ const router = express.Router();
 
 //for list of inventories
 router.get("/", async (_req, res) => {
-  try {
-    const inventories = await knex("inventories").select(
-      "id",
-      "item_name",
-      "category",
-      "status",
-      "quantity"
-    );
-    if (inventories.length === 0) {
-      return res.status(404).json({ message: "No inventories found" });
-    }
-    res.status(200).json(inventories);
-  } catch (error) {
-    res.status(500).send(`Error retrieving inventories: ${error.message}`);
-  }
-});
+    try {
+    const inventories = await knex("inventories")
+    .join("warehouses", "warehouses.id", "inventories.warehouse_id").select(
+        "inventories.id",
+        "inventories.item_name",
+        "inventories.category",
+        "inventories.status",
+        "inventories.quantity",
+        "inventories.description",
+        "warehouses.warehouse_name"
+      );
+      if (inventories.length === 0) {
+        return res.status(404).json({ message: "No inventories found" });
+      }
+      res.status(200).json(inventories);
 
-//single inventory item
-router.get("/:id", async (req, res) => {
-  const { id } = req.params; 
-  try {
-    const [inventory] = await knex("inventories").where({ id: id }); 
-    if (!inventory) {
-      return res.status(404).json({ message: `Inventory with ID ${id} not found` });
+    } catch (error) {
+      res.status(500).send(`Error retrieving inventories: ${error.message}`);
     }
-    res.status(200).json(inventory);
-  } catch (error) {
-    res.status(500).json(`Error retrieving inventory: ${error.message}`);
-  }
-});
+  });
+  
+  //single inventory item
+  router.get("/:id", async (req, res) => {
+    const { id } = req.params; 
+    try {
+      const [inventory] = await knex("inventories").where({ id: id }); 
+      if (!inventory) {
+        return res.status(404).json({ message: `Inventory with ID ${id} not found` });
+      }
+      res.status(200).json(inventory);
+    } catch (error) {
+      res.status(500).json(`Error retrieving inventory: ${error.message}`);
+    }
+  });
 
-// Add Inventory
 router.post("/", async (req, res) => {
 
     if (!req.body.warehouse_id || !req.body.item_name || !req.body.description || !req.body.category || !req.body.status || (!req.body.quantity && req.body.quantity !== 0)) {

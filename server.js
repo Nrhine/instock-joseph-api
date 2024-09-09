@@ -7,6 +7,7 @@ import warehouseRoutes from './routes/warehouse-routes.js';
 const PORT = process.env.PORT || 8081;
 const app = express();
 
+
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -20,10 +21,10 @@ app.get('/', (req, res) => {
 app.use('/inventory', itemRoutes);
 
 // all warehouse routes
-app.use('/warehouses', warehouseRoutes);
+//app.use('/warehouses', warehouseRoutes);
 
 // post warehouse
-app.use('/api', warehouseRoutes)
+//app.use('/api', warehouseRoutes)
 
 // get inventories for a given warehouse /warehouses/:id/inventories
 app.use('/api/warehouses', warehouseRoutes);

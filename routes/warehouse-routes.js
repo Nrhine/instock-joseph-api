@@ -31,23 +31,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const warehouse = await knex("warehouses").where({ id }).first();
-    if (!warehouse) {
-      return res.status(404).json({ error: "Warehouse not found" });
-    }
-    res.status(200).json(warehouse);
-  } catch (error) {
-    res.status(500).send(`Error retrieving warehouse for edit: ${error}`);
-  }
+// for adding a new warehouse
+//router.post('/', addWarehouse);
+router.post('/', (req, res) => {
+  console.log("Received POST request to add warehouse", req.body);
+  addWarehouse(req, res);
 });
 
-// for adding a new warehouse
-router.post('/warehouses', addWarehouse);
-
-//update exist warehouse
 router.put(
   "/:id",
   [
@@ -62,7 +52,7 @@ router.put(
     body("contact_phone")
       .notEmpty()
       .withMessage("Phone number is required")
-      .isMobilePhone("en-US")
+      .matches(/^\+1\s?\(\d{3}\)\s?\d{3}-\d{4}$/)   
       .withMessage("Invalid phone number format"),
     body("contact_email")
       .notEmpty()
@@ -107,8 +97,8 @@ router.put(
       });
 
       const updatedWarehouse = await knex("warehouses").where({ id }).first();
-
       return res.status(200).json(updatedWarehouse);
+
     } catch (error) {
       return res
         .status(500)

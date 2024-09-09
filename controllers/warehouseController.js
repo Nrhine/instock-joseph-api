@@ -5,6 +5,7 @@ import { validateWarehouseData } from "../utils/validation.js";
 const knex = initKnex(configuration);
 
 export const addWarehouse = async (req, res) => {
+  console.log("Request body:", req.body);
   try {
     const warehouseData = req.body;
     const validationError = validateWarehouseData(warehouseData);

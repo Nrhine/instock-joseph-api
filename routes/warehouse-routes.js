@@ -17,8 +17,6 @@ router.get("/", async (_req, res) => {
   }
 });
 
-
-
 // for specific warehouse information
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -34,12 +32,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // for adding a new warehouse
-//router.post('/', addWarehouse);
 router.post('/', (req, res) => {
-  console.log("Received POST request to add warehouse", req.body);
   addWarehouse(req, res);
 });
 
+// for updating a warehouse
 router.put(
   "/:id",
   [
@@ -109,7 +106,7 @@ router.put(
   }
 );
 
-// this request only deletes the warehouse, I'll add the delete inventory to the code after talking to team
+// deletes the warehouse
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 

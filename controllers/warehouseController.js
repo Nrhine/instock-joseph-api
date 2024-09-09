@@ -4,6 +4,7 @@ import { validateWarehouseData } from "../utils/validation.js";
 
 const knex = initKnex(configuration);
 
+// Controller for Post Function to add new warehouse
 export const addWarehouse = async (req, res) => {
   console.log("Request body:", req.body);
   try {

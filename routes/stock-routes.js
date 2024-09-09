@@ -37,9 +37,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
-
-
+// Add Inventory
 router.post("/", async (req, res) => {
 
     if (!req.body.warehouse_id || !req.body.item_name || !req.body.description || !req.body.category || !req.body.status || (!req.body.quantity && req.body.quantity !== 0)) {
@@ -71,6 +69,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+// Delete Inventory
 router.delete("/:id", async (req, res) => {
     try {
         const itemDeleted = await knex("inventories")

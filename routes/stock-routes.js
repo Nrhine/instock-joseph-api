@@ -5,12 +5,38 @@ import express from "express";
 const router = express.Router();
 import { body, validationResult } from "express-validator";
 
+//for list of inventories
 router.get("/", async (_req, res) => {
   try {
-    const data = await knex("inventories");
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving Inventories: ${err}`);
+    const inventories = await knex("inventories").select(
+      "id",
+      "item_name",
+      "category",
+      "status",
+      "quantity"
+    );
+    if (inventories.length === 0) {
+      return res.status(404).json({ message: "No inventories found" });
+    }
+    res.status(200).json(inventories);
+  } catch (error) {
+    res.status(500).send(`Error retrieving inventories: ${error.message}`);
+  }
+});
+
+//single inventory item
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [inventory] = await knex("inventories").where({ id: id });
+    if (!inventory) {
+      return res
+        .status(404)
+        .json({ message: `Inventory with ID ${id} not found` });
+    }
+    res.status(200).json(inventory);
+  } catch (error) {
+    res.status(500).json(`Error retrieving inventory: ${error.message}`);
   }
 });
 

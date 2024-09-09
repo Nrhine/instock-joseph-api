@@ -8,13 +8,29 @@ import { body, validationResult } from "express-validator";
 //for list of inventories
 router.get("/", async (_req, res) => {
   try {
-    const inventories = await knex("inventories").select(
-      "id",
-      "item_name",
-      "category",
-      "status",
-      "quantity"
-    );
+    //   const inventories = await knex("inventories").select(
+    //     "id",
+    //     "item_name",
+    //     "category",
+    //     "status",
+    //     "quantity",
+    //     "description"
+    //   );
+    //   if (inventories.length === 0) {
+    //     return res.status(404).json({ message: "No inventories found" });
+    //   }
+    //   res.status(200).json(inventories);
+    const inventories = await knex("inventories")
+      .join("warehouses", "warehouses.id", "inventories.warehouse_id")
+      .select(
+        "inventories.id",
+        "inventories.item_name",
+        "inventories.category",
+        "inventories.status",
+        "inventories.quantity",
+        "inventories.description",
+        "warehouses.warehouse_name"
+      );
     if (inventories.length === 0) {
       return res.status(404).json({ message: "No inventories found" });
     }
